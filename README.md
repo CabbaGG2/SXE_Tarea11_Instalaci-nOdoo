@@ -1,47 +1,27 @@
-# Instalación de servicio Prestashop con Docker Compose
+# Instalación de ERP Odoo con la herramienta Docker Compose
 
-En este README utilizaremos la herramienta Docker Compose para crear un multicontenedores para poner en marcha un servicio de Prestashop con un solo archivo YML.
+En este README utilizaremos la herramienta Docker Compose para crear un varios contenedores y poner en marchar un servicio de Odoo con un solo archivo YML.
 
-
-## Preparación de archivo YML: 
-
-Para crear los distintos contenedores en un único servicio se tiene que crear un archivo docker-compose.yml en la carpeta origen donde se realizará el siguiente comando para hacer funcionar el servicio:
-    
-```bash
-docker compose up -d
-```
 <br><br>
 
-## Preparación de los contenedores:
+## Preparación de el ejercicio:
 
-<details><summary><h3>Contenedor de la base de datos Mariadb</h3></summary>
+<details><summary><h3>Instalación y puesta en marcha del IDE PyCharm</h3></summary>
   
-  Para configurar la base de datos Mariadb hacemos uso de los siguientes atributos: 
+  Se realizó la instalación de PyCharm y se instalaron los siguientes Plugins: 
   <br><br>
-  ![Mariadb](Imagenes/1.png)
+  ![PyCharm_plugins](imagenes/1.png)
   <br><br>
+  ![PyCharm_plugins](imagenes/2.png)
 
-  | Atributo        | Valor                | Descripción                                                                                          |
-   | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
-   | name               | prestashop_sxe             | Es un atributo de alto nivel utilizado para darle un nombre al orquestador  |
-   | services           |                            | Es un array asociativo en el que se definen dentro los distintos servicios                                       |
-   | image               | mariadb:10.6              | Especifica la imagen en la que se basa el contenedor, en este caso es la base de datos mariadb la versión 10.6  |
-   | container_name      | prestashop_mariadb        | Especifica un nombre personalizado para el contenedor, en este caso es "prestashop_mariadb", si no se especifica Docker genera uno automáticamanete.   |
-   | restart             | always                    | Indica cuando debe reiniciarse el contenedor, sus valores pueden ser: no (no se reinicia), always (se reincia siempre que el contenedor se detenga), on-failure (se reinicia solo si falla), unless-stopped (se reinicia siempre a menos que se detenga manualmente). |
-   | environment         |                           | Es el atributo en la que se ván a especificar las distintas variables de entorno para el correcto funcionamiento del contenedor. |
-   | MYSQL_DATABASE      | ${MYSQL_DATABASE}         | Aquí se especifica el nombre de la base de datos, en este caso está codificado para que coja el valor de un archivo .env |
-   | MYSQL_USER          | ${MYSQL_USER}             | Aquí se especifíca el usuario de la base de datos, en el ejemplo está codificado para buscar el valor en el archivo .env|
-   | MYSQL_PASSWORD      | ${MYSQL_PASSWORD}         | Aquí se especifíca la contraseña de la base de datos, en el ejemplo está codificado para buscar el valor en el archivo .env|
-   | MYSQL_ROOT_PASSWORD | ${MYSQL_ROOT_PASSWORD}    | Sirve para asignar la contraseña del usuario administrador (root) de la base de datos durante la primera inicialización del contenedor. |
-   | volumes             | db_data:/var/lib/mysql    | Permite definir una lista de volúmenes, que pueden ser bind mount o un volumen docker. Para reutilizar un volumen en múltiples servicios, se debe definir fuera del bloque services. |
-   | networks            | prestashop_network        | Define las redes que se van a crear y que podrán ser usadas por los servicios.                         |
-   | healthcheck         |                           | Un healthcheck define un comando que Docker ejecuta periódicamente dentro del contenedor para comprobar su estado. Si la comprobación falla repetidamente, el contenedor se marca como "unhealthy". |
-   | test                | ["CMD", "mysqladmin", "ping", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"] | test es un atributo que indica la prueba que se realizará en el contenedor, en este caso le dice a Docker que ejecute un comando directo (CMD) a traves de la herramienta de MariaDB (mysqladmin) para verificar si el servidor responde (ping) conectado con el usuario root (-u root) y se le pasa la contraseña del usuario root. |
-   | interval            | 15s                       | Cada cuanto tiempo se ejecuta el test, en este caso 15s.                                              |
-   | timeout             | 10s                       | Cuanto tiempo se espera a que responda, en este caso 10s.                                             |
-   | retries             | 10                        | Cuántas veces debe fallar antes de marcarlo como “unhealthy”. En este caso son 10 veces.              |
-   | start_period        | 60s                       | Tiempo que Docker espera antes de empezar a hacer las comprobaciones, para dar tiempo al servicio a arrancar.|
-  
+  | Plugin        | Descripción                                                                                          |
+   | ------------------- | ----------------------------------------------------------------------------------------------------- |
+   | Docker               | Plugin que facilita la gestión de contenedores y compose. |
+   | .env files           | Plugin que realiza autollenado de variables de entornos utilizadas en tu archivo .env                                      |
+
+Como se puede observar en la siguiente imagen, el plugin de Docker autocompleta su lenguaje de marcado:
+ ![PyCharm_plugins](imagenes/3.png)
+
 </details>
 
 <details><summary><h3>Contenedor del servicio Prestashop</h3></summary>
