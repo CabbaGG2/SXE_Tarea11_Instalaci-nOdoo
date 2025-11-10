@@ -1,4 +1,4 @@
-name: Odoo_services
+name: odoo_services
 
 services:
   odoo:
