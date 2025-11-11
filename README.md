@@ -24,16 +24,17 @@ Como se puede observar en la siguiente imagen, el plugin de Docker autocompleta 
 
 </details>
 
-<details><summary><h3>Contenedor del servicio Prestashop</h3></summary>
+<details><summary><h3>Creación del archivo docker-compose.yml</h3></summary>
   
-  Para configurar el servicio de Prestashop hacemos uso de los siguientes atributos: 
+  Para poner en marcha el ERP creamos el siguiente docker-compose con los siguientes contenedores: 
   <br><br>
-  ![Prestashop](Imagenes/2.png)
+  ![Prestashop](imagenes/4.png)
   <br><br>
-
-  | Atributo        | Valor                | Descripción                                                                                          |
+  Aquí listamos las distintas variables de entorno necesarias para correr los 3 servicios que utilizaremos:
+  
+  | Variable        | Valor                | Descripción                                                                                          |
    | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
-   | image               | prestashop/prestashop:latest | Especifica la imagen en la que se basa el contenedor, en este caso es la ultima versión de Prestashop. |
+   | HOST               | db | Especifica cual es el anfitrión de la base de datos del servicio Odoo. |
    | container_name      | prestashop_app            | Especifica un nombre personalizado para el contenedor, en este caso es "prestashop_app", si no se especifica Docker genera uno automáticamanete.   |
    | restart             | always                    | Indica cuando debe reiniciarse el contenedor, sus valores pueden ser: no (no se reinicia), always (se reincia siempre que el contenedor se detenga), on-failure (se reinicia solo si falla), unless-stopped (se reinicia siempre a menos que se detenga manualmente). |
    | depends_on          | db                        | El atributo depends_on asegura que un contenedor se inicie antes que otro, pero no garantiza que el servicio dentro del contenedor esté realmente listo y funcionando, en este caso el servicio depende de "db" y para solucionar este problema db tiene el atributo healtcheck. |
