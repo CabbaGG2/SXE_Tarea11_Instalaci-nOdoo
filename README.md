@@ -90,9 +90,9 @@ docker compose up -d
   ![pgadmin](imagenes/10.png)
   <br><br>
   -  En la pestaña "Connection" se tienen que rellenar los siguientes espacios:
-  | Casilla        | Valor                | Descripción                                                                                          |
+  | Casilla              | Valor                      | Descripción                                                                                          |
    | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
-   | Host name/address      | db                | En esta casilla se coloca el nombre que asignamos al contenedor de la base de datos postgres (en este caso db)|
+   | Host name/address   | db                      | En esta casilla se coloca el nombre que asignamos al contenedor de la base de datos postgres (en este caso db)  |
    | Port                | 5432                       | Las base de datos por defecto se asignan en el puerto 5432.                                          |
    | Username            | odoo                       | Aqui colocamos el valor que escribimos en la variable de entorno POSTGRES_USER                        |
    | Password            | odoo                       | Aqui colocamos el valor que escribimos en la variable de entorno POSTGRES_PASSWORD                    |
