@@ -90,6 +90,7 @@ docker compose up -d
   ![pgadmin](imagenes/10.png)
   <br><br>
   -  En la pestaña "Connection" se tienen que rellenar los siguientes espacios:
+
   | Casilla              | Valor                      | Descripción                                                                                          |
    | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
    | Host name/address   | db                      | En esta casilla se coloca el nombre que asignamos al contenedor de la base de datos postgres (en este caso db)  |
