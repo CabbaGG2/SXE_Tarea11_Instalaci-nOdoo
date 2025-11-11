@@ -28,91 +28,111 @@ Como se puede observar en la siguiente imagen, el plugin de Docker autocompleta 
   
   Para poner en marcha el ERP creamos el siguiente docker-compose con los siguientes contenedores: 
   <br><br>
-  ![Prestashop](imagenes/4.png)
+  ![Docker](imagenes/4.png)
   <br><br>
   Aquí listamos las distintas variables de entorno necesarias para correr los 3 servicios que utilizaremos:
   
-  | Variable        | Valor                | Descripción                                                                                          |
-   | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
-   | HOST               | db | Especifica cual es el anfitrión de la base de datos del servicio Odoo. |
-   | USER      | odoo            | Especifica el usuario administrador de la app Odoo.  |
-   | PASSWORD             | odoo                    | Esta variable indica la clave del usuario administrador. |
-   | POSTGRES_USER          | odoo                        | Esta variable indica el usuario de la base de datos. |
-   | POSTGRES_PASSWORD           | odoo           | Indica la clave principal de la base de datos. |
-   | POSTGRES_DB               | postgres                 | indica la base de datos que se va a crear automáticamente. |
-   | PGADMIN_DEFAULT_EMAIL         | admin@admin.com | Esta variable especifíca el usuario de PgAdmin. |
-   | PGADMIN_DEFAULT_PASSWORD           | admin1234          | Esta variable especifíca la clave del usuario de PgAdmin. |
+  | Variable        | Valor                | Descripción                                                                     |
+   | ------------------- | ------------------------- | ---------------------------------------------------------------------- |
+   | HOST               | db                         | Especifica cual es el anfitrión de la base de datos del servicio Odoo. |
+   | USER                | odoo                        | Especifica el usuario administrador de la app Odoo.  |
+   | PASSWORD            | odoo                    | Esta variable indica la clave del usuario administrador. |
+   | POSTGRES_USER        | odoo                   | Esta variable indica el usuario de la base de datos. |
+   | POSTGRES_PASSWORD     | odoo                     | Indica la clave principal de la base de datos. |
+   | POSTGRES_DB               | postgres            | indica la base de datos que se va a crear automáticamente. |
+   | PGADMIN_DEFAULT_EMAIL       | admin@admin.com    | Esta variable especifíca el usuario de PgAdmin. |
+   | PGADMIN_DEFAULT_PASSWORD    | admin1234         | Esta variable especifíca la clave del usuario de PgAdmin. |
    
   <br><br>
   Para iniciar el compose utilizaremos el siguiente comando en la terminal en la ruta donde se encuentre el archivo .yml:
   ```bash
 docker compose up -d
 ```
+  Se verifica que los servicios estén funcionando en Docker Desktop:
+  <br><br>
+  ![Docker](imagenes/5.png)
+  <br><br>
   
 </details>
 
-<details><summary><h3>Contenedor del servicio phpMyAdmin</h3></summary>
+<details><summary><h3>Puesta en marcha de servicio Odoo y su Base de Datos</h3></summary>
   
-  Para configurar el servicio de PhpMyAdmin hacemos uso de los siguientes atributos: 
+  - Ya los servicio funcionando lo primero es ingresar en Odoo a traves del localhost:8069(en este caso porque es el puerto asignado) : 
   <br><br>
-  ![phpmyadmin](Imagenes/3.png)
+  ![Odoo](imagenes/6.png)
   <br><br>
+  - Vamos a rellenar todos los datos necesarios para crear la base de datos de Odoo (recordar el nombre de la base de datos porque se utilizará porteriormente para ingresar a PgAdmin)
+  - Mantener marcado la casilla "Demo Data" para demostraciones posteriores.
+  <br><br>
+  ![Odoo](imagenes/7.png)
+  <br><br>
+  - Ingresamos a la pagina principal de nuestra empresa utilizando el usuario y contraseña que acabamos de realizar en el paso anterior:
+  <br><br>
+  ![Odoo](imagenes/7.2.png)
+  <br><br>
+  - Verificamos la pagina principal
+  
+</details>
 
-  | Atributo        | Valor                | Descripción                                                                                          |
+<details><summary><h3>Configuración del servicio PgAdmin</h3></summary>
+  
+  - Ya realizado la base de datos de Odoo con anterioridad, ingresamos a el servicio de PgAdmin a través de Localhost:5050(para este caso es 5050 el puerto configurado)
+  -  Ingresamos con los datos que colocamos en las variables de entorno PGADMIN_DEFAULT_EMAIL y PGADMIN_DEFAULT_PASSWORD:
+  <br><br>
+  ![pgadmin](imagenes/8.png)
+  <br><br>
+  -  En "Dashboard" pinchamos Add New Server:
+  <br><br>
+  ![pgadmin](imagenes/9.png)
+  <br><br>
+  -  En la pestaña "General" escribimos en Name el nombre que queremos darle a la base de datos:
+  <br><br>
+  ![pgadmin](imagenes/10.png)
+  <br><br>
+  -  En la pestaña "Connection" se tienen que rellenar los siguientes espacios:
+  | Casilla        | Valor                | Descripción                                                                                          |
    | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
-   | image               | phpmyadmin:5              | Especifica la imagen en la que se basa el contenedor, en este caso utilizamos la versión 5 de phpmyadmin. |
-   | container_name      | prestashop_phpmyadmin     | Especifica un nombre personalizado para el contenedor, en este caso es "prestashop_phpmyadmin", si no se especifica Docker genera uno automáticamanete.   |
-   | restart             | always                    | Indica cuando debe reiniciarse el contenedor, sus valores pueden ser: no (no se reinicia), always (se reincia siempre que el contenedor se detenga), on-failure (se reinicia solo si falla), unless-stopped (se reinicia siempre a menos que se detenga manualmente). |
-   | depends_on          | db                        | El atributo depends_on asegura que un contenedor se inicie antes que otro, pero no garantiza que el servicio dentro del contenedor esté realmente listo y funcionando, en este caso el servicio depende de "db" y para solucionar este problema db tiene el atributo healtcheck. |
-   | condition           | service_healthy           | Con condition: service_healthy, le indicamos a Docker Compose que no inicie el contenedor de wordpress hasta que el healthcheck del contenedor db sea exitoso. |
-   | ports               | "8081:80"                 | Ports mapea puertos entre el host y el contenedor. En este caso mapea el puerto 8081 del contenedor con el 80 del host. |
-   | environment         |                           | Es el atributo en la que se ván a especificar las distintas variables de entorno para el correcto funcionamiento del contenedor. |
-   | PMA_HOST            | db                        | Esta variable define la dirección/host name del servidor de la base de datos de MySQL, en este ejemplo se usa el contenedor "db". |
-   | PMA_USER            | ${MYSQL_USER}             | Aquí se especifíca el usuario de la base de datos para que se abra automáticamente el servicio sin solicitar el usuario, en el ejemplo está codificado para buscar el valor en el archivo .env|
-   | PMA_PASSWORD        | ${MYSQL_PASSWORD}         | Aquí se especifíca la contraseña de la base de datos para que se abra automáticamente el servicio sin solicitar la contraseña, en el ejemplo está codificado para buscar el valor en el archivo .env |
-   | networks            | prestashop_network        | Define las redes que se van a crear y que podrán ser usadas por los servicios.                         |
+   | Host name/address      | db                | En esta casilla se coloca el nombre que asignamos al contenedor de la base de datos postgres (en este caso db)|
+   | Port                | 5432                       | Las base de datos por defecto se asignan en el puerto 5432.                                          |
+   | Username            | odoo                       | Aqui colocamos el valor que escribimos en la variable de entorno POSTGRES_USER                        |
+   | Password            | odoo                       | Aqui colocamos el valor que escribimos en la variable de entorno POSTGRES_PASSWORD                    |
 
-- Para reutilizar las redes y los volumenes en multiples servicios hay que declarar las variables fuera del bloque "services" como se puede ver en la imagen.
-</details>
-
-<details><summary><h3>Creación del fichero .env</h3></summary>
-  
-  Para crear el archivo .env solo se tiene que crear el fichero sin nombre antes del punto: 
   <br><br>
-  ![envFile](Imagenes/4.png)
+  ![pgadmin](imagenes/11.png)
   <br><br>
-  En este fichero se declaran todas las variables que utilizará el compose.yml para asignarlas a sus variables de entorno.
-
-  | Variable        | Valor                | Descripción                                                                                          |
-   | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
-   | MYSQL_DATABASE      | ps_sxe2526                | Nombre de la base de datos MySQL.                                                                     |
-   | MYSQL_USER          | gregorioSXE               | Nombre del usuario administrador de la base de datos MySQL.                                           |
-   | MYSQL_PASSWORD      | ClaveSuperFuerte1234SXE   | Contraseña de la base de datos MySQL.                                                                  |
-   | MYSQL_ROOT_PASSWORD | claveSuperSegura1234      | Contraseña del usuario root de la base de datos MySQL.                                                 |
-   | PS_INSTALL_AUTO     | 0                         | Variable que se le pasa a Prestashop para realizar la instalación automática, en caso de "0" Prestashop no realiza la instalación automática. |
-   | PS_LANGUAGE         | es                        | Variable del lenguaje en el que se instalará el Prestashop.                                            |
-   | PS_COUNTRY          | es                        | Variable del pais en el que se instalará el Prestashop.                                            |
-   | ADMIN_EMAIL         | greg@prestashop.com       | Esta variable define el correo del administrador de Prestashop.                                        |
-   | ADMIN_PASSWORD      | Admin1234                 | Esta variable define la contraseña del administrador de Prestashop.                                    |
-   | PS_DOMAIN           | localhost:8080            | Esta variable indica cual es la dirección dominio por la cuál va a ser accesible el servicio.          |
+  - Pinchamos "Save"
+  <br><br>
+  ![pgadmin](imagenes/12.png)
+  <br><br>
+  Base de datos ya visible desde el gestor PgAdmin.
 
 </details>
 
-<details><summary><h3>Capturas de puesta en marcha</h3></summary>
+<details><summary><h3>Puesta en marcha de Odoo (con datos de demostración)</h3></summary>
   
-  Aquí se puede ver que phpmyadmin cargó las tablas de la base de datos correctamente y PrestaShop realizó la instalación automática sin ningún inconveniente: 
+  - Lo primero será desde la tienda descargar los módulos Ventas, Compras y Contactos: 
   <br><br>
-  ![servicios](Imagenes/5.png)
+  ![Modulos](imagenes/13.png)
   <br><br>
-  ![servicios](Imagenes/6.png)
+  - Capturas de los distintos módulos descargados funcionando con los datos de demostración:
+  <br><br>
+  ![Modulos](imagenes/14.png)
+  <br><br><br><br>
+  ![Modulos](imagenes/15.png)
+  <br><br><br><br>
+  ![Modulos](imagenes/16.png)
+  <br><br>
 
 </details>
 
 ## Contacto
 José Gregorio Cámara Depablos - [@CabbaGG](https://x.com/Geek_Cabagge) - JOS.95camara@gmail.com
 
-Project Link: ([Instalación de servicio Prestashop con Docker Compose](https://github.com/CabbaGG2/SXE---PracticaDockerComposePrestoshop))
+Project Link: ([Instalación de ERP Odoo con Docker Compose](https://github.com/CabbaGG2/SXE_Tarea11_Instalaci-nOdoo))
 
 ## Documentación
 
 * [Documentación de Docker](https://docs.docker.com/get-started/)
+* [Documentación de Postgres](https://hub.docker.com/_/postgres)
+* [Documentación de PgAdmin](https://hub.docker.com/r/dpage/pgadmin4)
+* [Documentación de Odoo](https://hub.docker.com/_/odoo)
