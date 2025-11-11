@@ -35,26 +35,19 @@ Como se puede observar en la siguiente imagen, el plugin de Docker autocompleta 
   | Variable        | Valor                | Descripción                                                                                          |
    | ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
    | HOST               | db | Especifica cual es el anfitrión de la base de datos del servicio Odoo. |
-   | container_name      | prestashop_app            | Especifica un nombre personalizado para el contenedor, en este caso es "prestashop_app", si no se especifica Docker genera uno automáticamanete.   |
-   | restart             | always                    | Indica cuando debe reiniciarse el contenedor, sus valores pueden ser: no (no se reinicia), always (se reincia siempre que el contenedor se detenga), on-failure (se reinicia solo si falla), unless-stopped (se reinicia siempre a menos que se detenga manualmente). |
-   | depends_on          | db                        | El atributo depends_on asegura que un contenedor se inicie antes que otro, pero no garantiza que el servicio dentro del contenedor esté realmente listo y funcionando, en este caso el servicio depende de "db" y para solucionar este problema db tiene el atributo healtcheck. |
-   | condition           | service_healthy           | Con condition: service_healthy, le indicamos a Docker Compose que no inicie el contenedor de wordpress hasta que el healthcheck del contenedor db sea exitoso. |
-   | ports               | "8080:80"                 | Ports mapea puertos entre el host y el contenedor. En este caso mapea el puerto 8080 del contenedor con el 80 del host. |
-   | environment         |                           | Es el atributo en la que se ván a especificar las distintas variables de entorno para el correcto funcionamiento del contenedor. |
-   | DB_SERVER           | db                        | Aquí se establece la variable de entorno de donde se cogerá la base de datos, en este ejemplo se usa el contenedor "db". |
-   | DB_NAME             | ${MYSQL_DATABASE}         | Aquí se especifica el nombre de la base de datos, en este caso está codificado para que coja el valor de un archivo .env|
-   | DB_USER             | ${MYSQL_USER}             | Aquí se especifíca el usuario de la base de datos, en el ejemplo está codificado para buscar el valor en el archivo .env|
-   | DB_PASSWD           | ${MYSQL_PASSWORD}         | Aquí se especifíca la contraseña de la base de datos, en el ejemplo está codificado para buscar el valor en el archivo .env |
-   | PS_INSTALL_AUTO     | 1                         | Este entorno de variable le indica al servicio que realice una instalación automática.                 |
-   | PS_DOMAIN           | ${PS_DOMAIN}              | Este entorno de variable indica cual es la dirección dominio por la cuál va a ser accesible el servicio. |
-   | PS_COUNTRY          | "es"                      | Esta variable cambia el país por defecto en el que se instala PrestaShop, en el ejemplo cambiamos el país a España. |
-   | PS_LANGUAGE         | "es"                      | Esta variable cambia el lenguaje por defecto en el que se instala PrestaShop, en el ejemplo cambiamos a español.    |
-   | ADMIN_MAIL          | ${ADMIN_MAIL}             | Esta variable sobreescribe el email por defecto del usuario admin, en este ejemplo está codificado en el archivo .env |
-   | ADMIN_PASSWD        | ${ADMIN_PASSWD}           | Esta variable sobreescribe la clave por defecto del usuario admin, en este ejemplo está codificado en el archivo .env |
-   | PS_FOLDER_ADMIN     | admin4577                 | Esta variable cambia el nombre de la carpeta de administrador, en nuestro caso la renombramos "admin4577".            |
-   | PS_FOLDER_INSTALL   | install4577               | Esta variable cambia el nombre de la carpeta de instalación en donde se instala todo el programa de PrestaShop que se encuentra en el contenedor, en nuestro caso se renombró "install4577" |
-   | volumes             | prestashop_data:/var/www/html | Permite definir una lista de volúmenes, que pueden ser bind mount o un volumen docker. Para reutilizar un volumen en múltiples servicios, se debe definir fuera del bloque services. |
-   | networks            | prestashop_network        | Define las redes que se van a crear y que podrán ser usadas por los servicios.                         |
+   | USER      | odoo            | Especifica el usuario administrador de la app Odoo.  |
+   | PASSWORD             | odoo                    | Esta variable indica la clave del usuario administrador. |
+   | POSTGRES_USER          | odoo                        | Esta variable indica el usuario de la base de datos. |
+   | POSTGRES_PASSWORD           | odoo           | Indica la clave principal de la base de datos. |
+   | POSTGRES_DB               | postgres                 | indica la base de datos que se va a crear automáticamente. |
+   | PGADMIN_DEFAULT_EMAIL         | admin@admin.com | Esta variable especifíca el usuario de PgAdmin. |
+   | PGADMIN_DEFAULT_PASSWORD           | admin1234          | Esta variable especifíca la clave del usuario de PgAdmin. |
+   
+  <br><br>
+  Para iniciar el compose utilizaremos el siguiente comando en la terminal en la ruta donde se encuentre el archivo .yml:
+  ```bash
+docker compose up -d
+```
   
 </details>
 
